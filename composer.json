@@ -1,0 +1,20 @@
+{
+    "name": "seanmorris/kalisti",
+    "description": "Channel based messaging interface",
+    "authors": [
+        {
+            "name": "Sean Morris",
+            "email": "inquire@seanmorr.is"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+		"simpletest/simpletest": "dev-master"
+	},
+    "autoload": {
+        "psr-4": {
+            "SeanMorris\\Kalisti\\Test\\": "test/",
+            "SeanMorris\\Kalisti\\":       "source/"
+        }
+    }
+}
