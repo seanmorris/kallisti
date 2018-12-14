@@ -100,6 +100,14 @@ class Hub
 			{
 				$channels[$channelName] = $this->channels[$channelName];
 			}
+
+			if($reason == 'publish' && $channel::isWildcard($name))
+			{
+				if(($comboName = $channel::compareNames($name, $channelName)) !== FALSE)
+				{
+					$channels[$comboName] = $this->channels[$comboName];
+				}
+			}
 		}
 
 		return $channels;
