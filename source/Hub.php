@@ -12,7 +12,7 @@ class Hub
 		return ['*' => 'SeanMorris\Kalisti\Channel'];
 	}
 
-	public function getChannels($name)
+	public function getChannels($name, $reason = null)
 	{
 		if($this->channels[$name] ?? FALSE)
 		{
@@ -41,7 +41,7 @@ class Hub
 				continue;
 			}
 
-			if(($comboName = $channelClass::compareNames($name, $channelName))!==FALSE)
+			if(($comboName = $channelClass::compareNames($channelName, $name))!==FALSE)
 			{
 				if($range = $channelClass::deRange($comboName))
 				{
@@ -60,20 +60,24 @@ class Hub
 				{
 					if($channelName == $comboName || $channelClass::create($comboName))
 					{
-						$this->channels[$comboName] = new $channelClass($this, $comboName);
-
-						foreach($this->subscriptions as $agentId => $list)
+						if($reason !== 'publish')
 						{
-							foreach($list as $subChannelName => $isSubbed)
-							{
-								if($isSubbed && $channelClass::isWildcard($subChannelName))
-								{
-									$this->channels[$comboName]->subscribe($this->agents[$agentId]);
+							$this->channels[$comboName] = new $channelClass($this, $comboName);
 
-									$this->subscriptions[$agentId][$subChannelName] = TRUE;
+							foreach($this->subscriptions as $agentId => $list)
+							{
+								foreach($list as $subChannelName => $isSubbed)
+								{
+									if($isSubbed && $channelClass::isWildcard($subChannelName))
+									{
+										$this->channels[$comboName]->subscribe($this->agents[$agentId]);
+
+										$this->subscriptions[$agentId][$subChannelName] = TRUE;
+									}
 								}
 							}
 						}
+
 					}
 				}
 
@@ -87,14 +91,14 @@ class Hub
 
 		foreach($this->channels as $channelName => $channel)
 		{
-			if($channel::containsRange($name))
+			if($channel::containsRange($channelName))
 			{
 				continue;
 			}
 
-			if($comboName = $channel::compareNames($name, $channelName))
+			if(($comboName = $channel::compareNames($channelName, $name)) !== FALSE)
 			{
-				$channels[$comboName] = $this->channels[$comboName];
+				$channels[$channelName] = $this->channels[$channelName];
 			}
 		}
 
@@ -110,7 +114,7 @@ class Hub
 	{
 		$this->agents[$agent->id] = $agent;
 
-		if($channels = $this->getChannels($channelName, $agent))
+		if($channels = $this->getChannels($channelName, 'subscribe'))
 		{
 			foreach($channels as $_channelName => $channel)
 			{
@@ -119,22 +123,30 @@ class Hub
 				$this->subscriptions[$agent->id][$_channelName] = TRUE;
 			}
 		}
-
-		$this->subscriptions[$agent->id][$channelName] = TRUE;
 	}
 
 	public function unsubscribe($channelName, $agent)
 	{
 		if($channels = $this->getChannels($channelName))
 		{
+			$remove = [];
+
 			foreach($channels as $_channelName => $channel)
 			{
 				$channel->unsubscribe($agent);
 
 				unset($this->subscriptions[$agent->id][$_channelName]);
+
+				if(!$channel->subscribers)
+				{
+					$remove[] = $_channelName;
+				}
 			}
 
-			unset($this->subscriptions[$agent->id]['*']);
+			foreach($remove as $r)
+			{
+				unset($this->channels[$r]);
+			}
 		}
 
 		unset($this->subscriptions[$agent->id][$channelName]);
@@ -147,11 +159,11 @@ class Hub
 
 	public function publish($channelName, $content, $origin = NULL)
 	{
-		if(!$channels = $this->getChannels($channelName))
+		if(!$channels = $this->getChannels($channelName, 'publish'))
 		{
 			fwrite(STDERR, sprintf(
 				"Channel %s does not exist!\n"
-				, $channelName
+				, $_channelName
 			));
 
 			return;

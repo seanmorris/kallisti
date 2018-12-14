@@ -17,7 +17,7 @@ class Channel
 
 	public static function isWildcard($name)
 	{
-		return preg_match('/\*/', $name)
+		return preg_match('/[\*\#]/', $name)
 			|| static::isRange($name)
 			|| static::containsRange($name)
 		;
@@ -144,21 +144,17 @@ class Channel
 
 			if($cmpA !== $cmpB)
 			{
-				if(intval($cmpA) == $cmpA && $cmpB == '#')
+				if(is_numeric($cmpA) && ((int)$cmpA) == $cmpA && $cmpB == '#')
+				{
+					return FALSE;
+				}
+				else if(is_numeric($cmpB) && intval($cmpB) == $cmpB && $cmpA == '#')
 				{
 					$returnNode = $cmpB;
-					if($cmpA !== '*')
-					{
-						$returnNode = $cmpA;
-					}
 				}
-				else if(intval($cmpB) == $cmpB && $cmpA == '#')
+				else if($cmpA !== '*' && $cmpB == '*')
 				{
-					$returnNode = $cmpA;
-					if($cmpB !== '*')
-					{
-						$returnNode = $cmpB;
-					}
+					return FALSE;
 				}	
 				else if($cmpA !== '*' && $cmpB !== '*')
 				{
