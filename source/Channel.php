@@ -162,7 +162,7 @@ class Channel
 				}	
 				else if($cmpA !== '*' && $cmpB !== '*')
 				{
-					$rangeForm = '/^(\d+)\-?(\d+)?$/';
+					$rangeForm = '/^(\d+)+\-?(\d+)?$/';
 
 					$mA = preg_match($rangeForm, $cmpA, $groupA);
 					$mB = preg_match($rangeForm, $cmpB, $groupB);

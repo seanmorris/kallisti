@@ -16,7 +16,10 @@ class Hub
 	{
 		if($this->channels[$name] ?? FALSE)
 		{
-			return [$name => $this->channels[$name]];
+			if(!($this->channels[$name])::isWildcard($name))
+			{
+				return [$name => $this->channels[$name]];
+			}
 		}
 
 		$channelClasses = $this->channels();
@@ -72,7 +75,6 @@ class Hub
 							}
 						}
 					}
-
 				}
 
 				if(isset($this->channels[$comboName]))
@@ -85,9 +87,14 @@ class Hub
 
 		foreach($this->channels as $channelName => $channel)
 		{
-			if($channel::compareNames($name, $channelName))
+			if($channel::containsRange($name))
 			{
-				$channels[$channelName] = $this->channels[$channelName];
+				continue;
+			}
+
+			if($comboName = $channel::compareNames($name, $channelName))
+			{
+				$channels[$comboName] = $this->channels[$comboName];
 			}
 		}
 
@@ -113,7 +120,7 @@ class Hub
 			}
 		}
 
-		// $this->subscriptions[$agent->id][$channelName] = TRUE;
+		$this->subscriptions[$agent->id][$channelName] = TRUE;
 	}
 
 	public function unsubscribe($channelName, $agent)
@@ -163,5 +170,10 @@ class Hub
 		}
 
 		return $output;
+	}
+
+	public function listChannels()
+	{
+		return $this->channels;
 	}
 }
