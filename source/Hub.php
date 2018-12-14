@@ -163,7 +163,7 @@ class Hub
 		{
 			fwrite(STDERR, sprintf(
 				"Channel %s does not exist!\n"
-				, $_channelName
+				, $channelName
 			));
 
 			return;
