@@ -44,7 +44,7 @@ class Test extends \UnitTestCase
 
 			$this->assertEqual(
 				$content, $result->body
-				, 'Titles do not match for model #' . $id
+				, 'Bodies do not match for model #' . $id
 			);
 		}
 	}

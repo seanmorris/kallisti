@@ -9,7 +9,7 @@ class Agent extends \SeanMorris\Kalisti\Agent
 
 	protected function receiver($content, &$output, $origin, $channel, $original)
 	{
-		list(,$type, $id, $property) = explode(':', $channel->name);
+		list(,$type, $id, $property) = explode(':', $original);
 
 		$output = $type::load($id);
 		

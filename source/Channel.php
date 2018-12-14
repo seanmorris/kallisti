@@ -18,26 +18,69 @@ class Channel
 	public static function isWildcard($name)
 	{
 		return preg_match('/\*/', $name)
-			|| static::isRange($name);
+			|| static::isRange($name)
+			|| static::containsRange($name)
+		;
 	}
 
 	public static function isRange($name)
 	{
-		return preg_match('/0?x?[\dA-F]-0?x?[\dA-F]/', $name);
+		return preg_match('/^0?x?[\dA-F]+-0?x?[\dA-F]+$/', $name);
+	}
+
+	public static function containsRange($name)
+	{
+		return preg_match('/0?x?[\dA-F]+-0?x?[\dA-F]+/', $name);
 	}
 
 	public static function deRange($name)
 	{
-		if(!static::isRange($name))
-		{
-			return [];
-		}
-		else
-		{
-			list($start, $end) = explode('-', $name);
+		$split  = explode(static::SEPARATOR, $name);
+		$format = [];
+		$names  = [];
 
-			return range($start, $end);
+		foreach($split as $segment)
+		{
+			if(!static::isRange($segment))
+			{
+				array_push($format, $segment);
+				continue;
+			}
+
+			array_push($format, '%d');
+
+			if(!$names)
+			{
+				list($start, $end) = explode('-', $segment);
+				$_format = join(static::SEPARATOR, $format);
+
+				foreach(range($start, $end) as $i)
+				{
+					$names[] = sprintf($_format, $i);
+				}
+			}
+			else
+			{
+				$_names = $names;
+				$names  = [];
+				list($start, $end) = explode('-', $segment);
+				foreach($_names as $partialName)
+				{
+					$_format = $partialName
+						. static::SEPARATOR
+						. join(static::SEPARATOR, $format);
+
+					foreach(range($start, $end) as $i)
+					{
+						$names[] = sprintf($_format, $i);
+					}
+				}
+			}
+
+			$format = [];
 		}
+
+		return $names;
 	}
 
 	protected static function deHex($string)
@@ -103,11 +146,19 @@ class Channel
 			{
 				if(intval($cmpA) == $cmpA && $cmpB == '#')
 				{
-					$returnNode = $cmpA;
+					$returnNode = $cmpB;
+					if($cmpA !== '*')
+					{
+						$returnNode = $cmpA;
+					}
 				}
 				else if(intval($cmpB) == $cmpB && $cmpA == '#')
 				{
-					$returnNode = $cmpB;
+					$returnNode = $cmpA;
+					if($cmpB !== '*')
+					{
+						$returnNode = $cmpB;
+					}
 				}	
 				else if($cmpA !== '*' && $cmpB !== '*')
 				{

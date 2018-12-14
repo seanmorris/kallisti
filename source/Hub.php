@@ -3,7 +3,7 @@ namespace SeanMorris\Kalisti;
 class Hub
 {
 	protected
-		$agents         = []
+		$agents          = []
 		, $channels      = []
 		, $subscriptions = [];
 
@@ -14,19 +14,19 @@ class Hub
 
 	public function getChannels($name)
 	{
+		if($this->channels[$name] ?? FALSE)
+		{
+			return [$name => $this->channels[$name]];
+		}
+
 		$channelClasses = $this->channels();
 
-		if(($channelClasses[$name] ?? FALSE) && !($this->channels[$name] ?? FALSE))
+		if($channelClasses[$name] ?? FALSE)
 		{
 			if(!$channelClasses[$name]::isWildcard($name))
 			{
 				$this->channels[$name] = new $channelClasses[$name]($this, $name);
 			}
-		}
-
-		if($this->channels[$name] ?? FALSE)
-		{
-			return [$name => $this->channels[$name]];
 		}
 
 		$channels = [];
@@ -48,7 +48,7 @@ class Hub
 					}
 					continue;
 				}
-				else if($channelClass::isWildcard($comboName))
+				else if($channelClass::isRange($comboName))
 				{
 					continue;
 				}
@@ -113,7 +113,7 @@ class Hub
 			}
 		}
 
-		$this->subscriptions[$agent->id][$channelName] = TRUE;
+		// $this->subscriptions[$agent->id][$channelName] = TRUE;
 	}
 
 	public function unsubscribe($channelName, $agent)

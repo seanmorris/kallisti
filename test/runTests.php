@@ -15,7 +15,7 @@ $tests = [
 array_map(
 	function($namespace) {
 		$testClass = $namespace . '\Test';
-		$test = new $testClass;
+		$test      = new $testClass;
 		$test->run(new \TextReporter());
 		echo PHP_EOL;
 	}
