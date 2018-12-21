@@ -126,9 +126,10 @@ class Hub
 		{
 			foreach($channels as $_channelName => $channel)
 			{
-				$channel->subscribe($agent);
-
-				$this->subscriptions[$agent->id][$_channelName] = TRUE;
+				if($channel->subscribe($agent) !== FALSE)
+				{
+					$this->subscriptions[$agent->id][$_channelName] = TRUE;
+				}
 			}
 		}
 	}
