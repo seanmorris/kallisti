@@ -9,7 +9,9 @@ class Hub
 
 	public function channels()
 	{
-		return ['*' => 'SeanMorris\Kalisti\Channel'];
+		$channels = (array)\SeanMorris\Ids\Settings::read('kalisti', 'channels');
+
+		return $channels ?? ['*' => 'SeanMorris\Kalisti\Channel'];
 	}
 
 	public function getChannels($name, $reason = null)

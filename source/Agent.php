@@ -4,7 +4,7 @@ class Agent
 {
 	private $id;
 	private static $_id = 0;
-	protected $hub, $expose = NULL;
+	protected $hub, $expose = NULL, $context = [];
 
 	public function __construct()
 	{
@@ -84,5 +84,30 @@ class Agent
 		}
 
 		$this->hub = $hub;
+	}
+
+	public function &getContext()
+	{
+		return $this->context;
+	}
+
+	public function setContext(&$context)
+	{
+		$this->context =& $context;
+	}
+
+	public function contextGet($name, $default = NULL)
+	{
+		if(isset($this->context[$name]))
+		{
+			return $this->context[$name];
+		}
+
+		return $default;
+	}
+
+	public function contextSet($name, $value)
+	{
+		$this->context[$name] = $value;
 	}
 }
