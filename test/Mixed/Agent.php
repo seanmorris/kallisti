@@ -1,6 +1,6 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Mixed;
-class Agent extends \SeanMorris\Kalisti\Agent
+namespace SeanMorris\Kallisti\Test\Mixed;
+class Agent extends \SeanMorris\Kallisti\Agent
 {
 	public function exchange()
 	{

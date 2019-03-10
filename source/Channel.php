@@ -1,5 +1,5 @@
 <?php
-namespace SeanMorris\Kalisti;
+namespace SeanMorris\Kallisti;
 class Channel
 {
 	const SEPARATOR = ':';

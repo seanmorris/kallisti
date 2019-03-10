@@ -1,11 +1,11 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Number;
+namespace SeanMorris\Kallisti\Test\Number;
 class Test extends \UnitTestCase
 {
 	function testRange()
 	{
-		$hub   = new \SeanMorris\Kalisti\Test\Number\RangeHub;
-		$agent = new \SeanMorris\Kalisti\Test\Number\Agent;
+		$hub   = new \SeanMorris\Kallisti\Test\Number\RangeHub;
+		$agent = new \SeanMorris\Kallisti\Test\Number\Agent;
 
 		$agent->register($hub);
 
@@ -38,8 +38,8 @@ class Test extends \UnitTestCase
 
 	function testWild()
 	{
-		$hub   = new \SeanMorris\Kalisti\Test\Number\WildHub;
-		$agent = new \SeanMorris\Kalisti\Test\Number\Agent;
+		$hub   = new \SeanMorris\Kallisti\Test\Number\WildHub;
+		$agent = new \SeanMorris\Kallisti\Test\Number\Agent;
 
 		$agent->register($hub);
 

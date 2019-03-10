@@ -1,5 +1,5 @@
 {
-    "name": "seanmorris/kalisti",
+    "name": "seanmorris/kallisti",
     "description": "Channel based messaging interface",
     "authors": [
         {
@@ -13,8 +13,8 @@
 	},
     "autoload": {
         "psr-4": {
-            "SeanMorris\\Kalisti\\Test\\": "test/",
-            "SeanMorris\\Kalisti\\":       "source/"
+            "SeanMorris\\Kallisti\\Test\\": "test/",
+            "SeanMorris\\Kallisti\\":       "source/"
         }
     }
 }

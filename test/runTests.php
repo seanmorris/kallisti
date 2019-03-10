@@ -6,11 +6,14 @@ function stdErr(...$args)
 	fwrite(STDERR, sprintf(...$args) . PHP_EOL);
 }
 
-$tests = [
-	'\SeanMorris\Kalisti\Test\Number'
-	, '\SeanMorris\Kalisti\Test\Named'
-	, '\SeanMorris\Kalisti\Test\Mixed'
-];
+if(!$tests = array_slice($argv, 1))
+{
+	$tests = [
+		'\SeanMorris\Kallisti\Test\Number'
+		, '\SeanMorris\Kallisti\Test\Named'
+		, '\SeanMorris\Kallisti\Test\Mixed'
+	];
+}
 
 array_map(
 	function($namespace) {

@@ -1,5 +1,5 @@
 <?php
-namespace SeanMorris\Kalisti;
+namespace SeanMorris\Kallisti;
 class Hub
 {
 	protected
@@ -9,9 +9,14 @@ class Hub
 
 	public function channels()
 	{
-		$channels = (array)\SeanMorris\Ids\Settings::read('kalisti', 'channels');
+		$channels = NULL;
 
-		return $channels ?? ['*' => 'SeanMorris\Kalisti\Channel'];
+		if(class_exists('SeanMorris\Ids\Settings'))
+		{
+			$channels = (array)\SeanMorris\Ids\Settings::read('kallisti', 'channels');			
+		}
+
+		return $channels ?? ['*' => 'SeanMorris\Kallisti\Channel'];
 	}
 
 	public function getChannels($name, $reason = null)

@@ -1,9 +1,9 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Number;
-class WildHub extends \SeanMorris\Kalisti\Hub
+namespace SeanMorris\Kallisti\Test\Number;
+class WildHub extends \SeanMorris\Kallisti\Hub
 {
 	public function channels()
 	{
-		return ['#' => 'SeanMorris\Kalisti\Channel'];
+		return ['#' => 'SeanMorris\Kallisti\Channel'];
 	}
 }

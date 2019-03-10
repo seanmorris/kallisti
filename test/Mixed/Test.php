@@ -1,11 +1,11 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Mixed;
+namespace SeanMorris\Kallisti\Test\Mixed;
 class Test extends \UnitTestCase
 {
 	function testRange()
 	{
-		$hub   = new \SeanMorris\Kalisti\Hub;
-		$agent = new \SeanMorris\Kalisti\Test\Mixed\Agent;
+		$hub   = new \SeanMorris\Kallisti\Hub;
+		$agent = new \SeanMorris\Kallisti\Test\Mixed\Agent;
 
 		$agent->register($hub);
 
@@ -15,7 +15,7 @@ class Test extends \UnitTestCase
 		{
 			$result = $agent->send(
 				sprintf(
-					'model:SeanMorris\Kalisti\Test\Mixed\FakeModel:%d:title'
+					'model:SeanMorris\Kallisti\Test\Mixed\FakeModel:%d:title'
 					, $id
 				)
 				, $content
@@ -31,7 +31,7 @@ class Test extends \UnitTestCase
 		{
 			$result = $agent->send(
 				sprintf(
-					'model:SeanMorris\Kalisti\Test\Mixed\FakeModel:%d:body'
+					'model:SeanMorris\Kallisti\Test\Mixed\FakeModel:%d:body'
 					, $id
 				)
 				, $content

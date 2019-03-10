@@ -1,11 +1,11 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Named;
+namespace SeanMorris\Kallisti\Test\Named;
 class Test extends \UnitTestCase
 {
 	function testRange()
 	{
-		$hub   = new \SeanMorris\Kalisti\Hub;
-		$agent = new \SeanMorris\Kalisti\Test\Named\Agent;
+		$hub   = new \SeanMorris\Kallisti\Hub;
+		$agent = new \SeanMorris\Kallisti\Test\Named\Agent;
 
 		$agent->register($hub);
 

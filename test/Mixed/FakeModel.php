@@ -1,5 +1,5 @@
 <?php
-namespace SeanMorris\Kalisti\Test\Mixed;
+namespace SeanMorris\Kallisti\Test\Mixed;
 class FakeModel
 {
 	static $cache;

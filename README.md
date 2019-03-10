@@ -1,3 +1,3 @@
-# SeanMorris\Kalisti
+# SeanMorris\Kallisti
 
 Chaos Management Engine.
