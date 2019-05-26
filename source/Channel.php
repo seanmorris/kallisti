@@ -282,7 +282,7 @@ class Channel
 		}
 	}
 
-	public function send($content, &$output, $origin, $originalChannel = NULL)
+	public function send($content, &$output, $origin, $originalChannel = NULLz)
 	{
 		foreach($this->subscribers as $agent)
 		{
@@ -292,6 +292,36 @@ class Channel
 				, $origin
 				, $this
 				, $originalChannel
+			);
+		}
+	}
+
+	public function say($content, &$output, $origin, $originalChannel = NULL, $cc = [], $bcc = [])
+	{
+		$recipients = [];
+
+		$recipients = array_unique(
+			array_merge($cc, $bcc)
+		);
+
+		$recipients = array_combine($recipients, array_fill(
+			0, count($recipients), TRUE
+		));
+
+		foreach($this->subscribers as $agent)
+		{
+			if(!isset($recipients[$agent->id]) || !$recipients[$agent->id])
+			{
+				continue;
+			}
+
+			$agent->onMessage(
+				$content
+				, $output
+				, $origin
+				, $this
+				, $originalChannel
+				, $cc
 			);
 		}
 	}

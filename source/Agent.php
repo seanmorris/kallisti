@@ -11,7 +11,7 @@ class Agent
 		$this->id = self::$_id++;
 	}
 
-	public function onMessage($content, &$output, $origin, $channel, $originalChannel)
+	public function onMessage($content, &$output, $origin, $channel, $originalChannel, $cc = NULL)
 	{
 		$exchange  = $this->exchange();
 		$receivers = [];
@@ -36,12 +36,13 @@ class Agent
 				, $origin
 				, $channel
 				, $originalChannel
+				, $cc
 			);
 		}
 
 		if($this->expose)
 		{
-			($this->expose)($content, $output, $origin, $channel, $originalChannel);
+			($this->expose)($content, $output, $origin, $channel, $originalChannel, $cc);
 		}
 	}
 
@@ -50,7 +51,7 @@ class Agent
 		return ['*' => 'receiver'];
 	}
 
-	protected function receiver($content, &$output, $origin, $channel, $originalChannel)
+	protected function receiver($content, &$output, $origin, $channel, $originalChannel, $cc)
 	{
 	}
 

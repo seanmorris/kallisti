@@ -13,14 +13,23 @@ class Hub
 
 		if(class_exists('SeanMorris\Ids\Settings'))
 		{
-			$channels = (array)\SeanMorris\Ids\Settings::read('kallisti', 'channels');			
+			$channels = (array)\SeanMorris\Ids\Settings::read('kallisti', 'channels');
 		}
 
-		return $channels ?? ['*' => 'SeanMorris\Kallisti\Channel'];
+		if($channels)
+		{
+			return $channels;
+		}
+
+		return ['*' => 'SeanMorris\Kallisti\Channel'];
 	}
 
 	public function getChannels($name, $reason = null)
 	{
+		fwrite(STDERR, sprintf(
+			"Getting %s\n", $name
+		));
+
 		if($this->channels[$name] ?? FALSE)
 		{
 			if(!($this->channels[$name])::isWildcard($name))
@@ -47,6 +56,12 @@ class Hub
 			{
 				continue;
 			}
+
+			fwrite(STDERR, sprintf(
+				"Comparing %s:\n%s\n\n"
+				, implode(' & ', [$channelName, $name])
+				, $channelClass::compareNames($channelName, $name)
+			));
 
 			if(($comboName = $channelClass::compareNames($channelName, $name))!==FALSE)
 			{
@@ -103,10 +118,10 @@ class Hub
 				continue;
 			}
 
-			if(($comboName = $channel::compareNames($channelName, $name)) !== FALSE)
-			{
-				$channels[$channelName] = $this->channels[$channelName];
-			}
+			// if(($comboName = $channel::compareNames($channelName, $name)) !== FALSE)
+			// {
+			// 	$channels[$channelName] = $this->channels[$channelName];
+			// }
 
 			if($reason == 'publish' && $channel::isWildcard($name))
 			{
@@ -127,12 +142,20 @@ class Hub
 
 	public function subscribe($channelName, $agent)
 	{
+		fwrite(STDERR, sprintf(
+			"Subsscribing to %s!\n"
+			, $channelName
+		));
 		$this->agents[$agent->id] = $agent;
 
 		if($channels = $this->getChannels($channelName, 'subscribe'))
 		{
 			foreach($channels as $_channelName => $channel)
 			{
+				fwrite(STDERR, sprintf(
+					"Sub to %s!\n"
+					, $_channelName
+				));
 				if($channel->subscribe($agent) !== FALSE)
 				{
 					$this->subscriptions[$agent->id][$_channelName] = TRUE;
@@ -194,6 +217,35 @@ class Hub
 				, $output
 				, $origin
 				, $channelName
+			);
+		}
+
+		return $output;
+	}
+
+	public function say($channelName, $content, $origin = NULL, $cc = [], $bcc = [])
+	{
+		if(!$channels = $this->getChannels($channelName, 'publish'))
+		{
+			fwrite(STDERR, sprintf(
+				"Channel %s does not exist!\n"
+				, $channelName
+			));
+
+			return;
+		}
+
+		$output = NULL;
+
+		foreach($channels as $channel)
+		{
+			$channel->say(
+				$content
+				, $output
+				, $origin
+				, $channelName
+				, $cc
+				, $bcc
 			);
 		}
 
