@@ -108,11 +108,24 @@ class Hub
 				continue;
 			}
 
-			if($reason == 'publish' && $channel::isWildcard($name))
+			if($reason == 'publish' && ($channel::isWildcard($name)))
 			{
 				if(($comboName = $channel::compareNames($name, $channelName)) !== FALSE)
 				{
 					$channels[$comboName] = $this->channels[$comboName];
+				}
+			}
+
+			if($reason == 'publish' && ($channel::isWildcard($channelName)))
+			{
+				if(($comboName = $channel::compareNames($channelName, $name)) !== FALSE)
+				{
+					if(!isset($this->channels[$channelName]))
+					{
+						$this->channels[$channelName] = new $channelClass($this, $comboName);
+					}
+
+					$channels[$channelName] = $this->channels[$channelName];
 				}
 			}
 		}
@@ -175,7 +188,13 @@ class Hub
 
 	public function publish($channelName, $content, $origin = NULL)
 	{
-		if(!$channels = $this->getChannels($channelName, 'publish'))
+		// var_dump($channelName);
+
+		$channels = $this->getChannels($channelName, 'publish');
+
+		// var_dump($channelName, array_keys($channels));
+
+		if(!$channels)
 		{
 			return;
 		}

@@ -4,7 +4,7 @@ class Agent extends \SeanMorris\Kallisti\Agent
 {
 	public function exchange()
 	{
-		return ['model:*:#:*' => 'receiver'];
+		return ['model:*' => 'receiver'];
 	}
 
 	protected function receiver($content, &$output, $origin, $channel, $original, $cc = NULL)

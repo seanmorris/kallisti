@@ -19,8 +19,7 @@ class Agent
 		foreach($exchange as $channelSelector => $receiver)
 		{
 			if(FALSE !== $channel::compareNames(
-				$channel->name
-				, $channelSelector
+				$channel->name, $channelSelector
 			)){
 				$receivers[] = $receiver;
 			}
@@ -69,7 +68,7 @@ class Agent
 	{
 		if(!$this->hub)
 		{
-			return;
+			throw new Exception('No hub registered to Agent!');
 		}
 
 		return $this->hub->publish($channel, $message, $this);

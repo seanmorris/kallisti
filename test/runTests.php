@@ -12,6 +12,7 @@ if(!$tests = array_slice($argv, 1))
 		'\SeanMorris\Kallisti\Test\Number'
 		, '\SeanMorris\Kallisti\Test\Named'
 		, '\SeanMorris\Kallisti\Test\Mixed'
+		// '\SeanMorris\Kallisti\Test\Mixed'
 	];
 }
 

@@ -282,7 +282,7 @@ class Channel
 		}
 	}
 
-	public function send($content, &$output, $origin, $originalChannel = NULLz)
+	public function send($content, &$output, $origin, $originalChannel = NULL)
 	{
 		foreach($this->subscribers as $agent)
 		{
