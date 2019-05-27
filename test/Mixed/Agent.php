@@ -7,7 +7,7 @@ class Agent extends \SeanMorris\Kallisti\Agent
 		return ['model:*:#:*' => 'receiver'];
 	}
 
-	protected function receiver($content, &$output, $origin, $channel, $original)
+	protected function receiver($content, &$output, $origin, $channel, $original, $cc = NULL)
 	{
 		list(,$type, $id, $property) = explode(':', $original);
 

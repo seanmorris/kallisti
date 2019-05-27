@@ -26,10 +26,6 @@ class Hub
 
 	public function getChannels($name, $reason = null)
 	{
-		fwrite(STDERR, sprintf(
-			"Getting %s\n", $name
-		));
-
 		if($this->channels[$name] ?? FALSE)
 		{
 			if(!($this->channels[$name])::isWildcard($name))
@@ -131,20 +127,12 @@ class Hub
 
 	public function subscribe($channelName, $agent)
 	{
-		fwrite(STDERR, sprintf(
-			"Subsscribing to %s!\n"
-			, $channelName
-		));
 		$this->agents[$agent->id] = $agent;
 
 		if($channels = $this->getChannels($channelName, 'subscribe'))
 		{
 			foreach($channels as $_channelName => $channel)
 			{
-				fwrite(STDERR, sprintf(
-					"Sub to %s!\n"
-					, $_channelName
-				));
 				if($channel->subscribe($agent) !== FALSE)
 				{
 					$this->subscriptions[$agent->id][$_channelName] = TRUE;
@@ -189,11 +177,6 @@ class Hub
 	{
 		if(!$channels = $this->getChannels($channelName, 'publish'))
 		{
-			fwrite(STDERR, sprintf(
-				"Channel %s does not exist!\n"
-				, $channelName
-			));
-
 			return;
 		}
 
@@ -216,11 +199,6 @@ class Hub
 	{
 		if(!$channels = $this->getChannels($channelName, 'publish'))
 		{
-			fwrite(STDERR, sprintf(
-				"Channel %s does not exist!\n"
-				, $channelName
-			));
-
 			return;
 		}
 
