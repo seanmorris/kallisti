@@ -57,12 +57,6 @@ class Hub
 				continue;
 			}
 
-			fwrite(STDERR, sprintf(
-				"Comparing %s:\n%s\n\n"
-				, implode(' & ', [$channelName, $name])
-				, $channelClass::compareNames($channelName, $name)
-			));
-
 			if(($comboName = $channelClass::compareNames($channelName, $name))!==FALSE)
 			{
 				if($range = $channelClass::deRange($comboName))
@@ -117,11 +111,6 @@ class Hub
 			{
 				continue;
 			}
-
-			// if(($comboName = $channel::compareNames($channelName, $name)) !== FALSE)
-			// {
-			// 	$channels[$channelName] = $this->channels[$channelName];
-			// }
 
 			if($reason == 'publish' && $channel::isWildcard($name))
 			{
