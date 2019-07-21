@@ -4,20 +4,19 @@ class Test extends \UnitTestCase
 {
 	function testRange()
 	{
-		$hub   = new \SeanMorris\Kallisti\Hub;
-		$agent = new \SeanMorris\Kallisti\Test\Mixed\Agent;
+		$hub    = new \SeanMorris\Kallisti\Hub;
+		$client = new \SeanMorris\Kallisti\Agent;
+		$server = new \SeanMorris\Kallisti\Test\Mixed\Agent;
 
-		$agent->register($hub);
+		$client->register($hub);
+		$server->register($hub);
 
 		$content = 'whoa!';
 
 		foreach(range(0x0, 0xFF) as $id)
 		{
-			$result = $agent->send(
-				sprintf(
-					'model:SeanMorris\Kallisti\Test\Mixed\FakeModel:%d:title'
-					, $id
-				)
+			$result = $client->send(
+				sprintf('model:SeanMorris\Kallisti\Test\Mixed\FakeModel:%d:title', $id)
 				, $content
 			);
 
@@ -29,7 +28,7 @@ class Test extends \UnitTestCase
 
 		foreach(range(0x0, 0xFF) as $id)
 		{
-			$result = $agent->send(
+			$result = $client->send(
 				sprintf(
 					'model:SeanMorris\Kallisti\Test\Mixed\FakeModel:%d:body'
 					, $id
