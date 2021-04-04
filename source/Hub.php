@@ -188,11 +188,7 @@ class Hub
 
 	public function publish($channelName, $content, $origin = NULL)
 	{
-		// var_dump($channelName);
-
 		$channels = $this->getChannels($channelName, 'publish');
-
-		// var_dump($channelName, array_keys($channels));
 
 		if(!$channels)
 		{

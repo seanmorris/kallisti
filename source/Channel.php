@@ -140,114 +140,12 @@ class Channel
 				return FALSE;
 			}
 
-			$returnNode = $cmpA !== '*' ? $cmpA : $cmpB;
+			$returnNode = static::compareSegments($cmpA, $cmpB);
 
-			if($cmpA !== $cmpB)
+			if($returnNode !== FALSE)
 			{
-				if(is_numeric($cmpA) && ((int)$cmpA) == $cmpA && $cmpB == '#')
-				{
-					return FALSE;
-				}
-				else if(is_numeric($cmpB) && intval($cmpB) == $cmpB && $cmpA == '#')
-				{
-					$returnNode = $cmpB;
-				}
-				else if($cmpA !== '*' && $cmpB == '*')
-				{
-					return FALSE;
-				}	
-				else if($cmpA !== '*' && $cmpB !== '*')
-				{
-					$rangeForm = '/^(\d+)+\-?(\d+)?$/';
-
-					$mA = preg_match($rangeForm, $cmpA, $groupA);
-					$mB = preg_match($rangeForm, $cmpB, $groupB);
-
-					if($mA && $mB)
-					{
-						$a1 = $groupA[1];
-						$a2 = $groupA[1];
-						$b1 = $groupB[1];
-						$b2 = $groupB[1];
-
-						if(isset($groupA[2]))
-						{
-							$a2 = $groupA[2];
-						}
-
-						if(isset($groupB[2]))
-						{
-							$b2 = $groupB[2];
-						}
-
-						if($a1 >= $b1 && $a2 <= $b2)
-						{
-							$returnNode = "$a1-$a2";
-
-							if($a1 == $a2)
-							{
-								$returnNode = (int) $a1;
-							}
-						}
-						else if($a1 <= $b1 && $a2 >= $b2)
-						{
-							$returnNode = "$b1-$b2";
-
-							if($b1 == $b2)
-							{
-								$returnNode = (int) $b2;
-							}
-						}
-						else if($a2 <= $b2 && $a2 >= $b1)
-						{
-							$returnNode = "$b1-$a2";
-
-							if($b1 == $a2)
-							{
-								$returnNode = (int) $b1;
-							}
-						}
-						else if($a1 <= $b2 && $a1 >= $b1)
-						{
-							$returnNode = "$a1-$b2";
-
-							if($a1 == $b2)
-							{
-								$returnNode = (int) $a1;
-							}
-						}
-						else if($b2 <= $a2 && $b2 >= $a1)
-						{
-							$returnNode = "$a1-$b2";
-
-							if($a1 == $b2)
-							{
-								$returnNode = (int) $a1;
-							}
-						}
-						else if($b1 <= $a2 && $b1 >= $a1)
-						{
-							$returnNode = "$b1-$a2";
-
-							if($b1 == $a2)
-							{
-								$returnNode = (int) $b1;
-							}
-						}
-						else
-						{
-							return FALSE;
-						}
-					}
-					else
-					{
-						return FALSE;
-					}
-
-				}
+				$result[] = $returnNode;
 			}
-
-			$result[] = $returnNode;
 		}
 
 		if(!$result)
@@ -256,6 +154,120 @@ class Channel
 		}
 
 		return implode(static::SEPARATOR, $result);
+	}
+
+	protected static function compareSegments($cmpA, $cmpB)
+	{
+		$returnNode = FALSE;
+
+		$returnNode = $cmpA !== '*' ? $cmpA : $cmpB;
+
+		if($cmpA !== $cmpB)
+		{
+			if(is_numeric($cmpA) && ((int)$cmpA) == $cmpA && $cmpB == '#')
+			{
+				return FALSE;
+			}
+			else if(is_numeric($cmpB) && intval($cmpB) == $cmpB && $cmpA == '#')
+			{
+				$returnNode = $cmpB;
+			}
+			else if($cmpA !== '*' && $cmpB == '*')
+			{
+				return FALSE;
+			}
+			else if($cmpA !== '*' && $cmpB !== '*')
+			{
+				$rangeForm = '/^(\d+)+\-?(\d+)?$/';
+
+				$mA = preg_match($rangeForm, $cmpA, $groupA);
+				$mB = preg_match($rangeForm, $cmpB, $groupB);
+
+				if($mA && $mB)
+				{
+					$a1 = $groupA[1];
+					$a2 = $groupA[1];
+					$b1 = $groupB[1];
+					$b2 = $groupB[1];
+
+					if(isset($groupA[2]))
+					{
+						$a2 = $groupA[2];
+					}
+
+					if(isset($groupB[2]))
+					{
+						$b2 = $groupB[2];
+					}
+
+					if($a1 >= $b1 && $a2 <= $b2)
+					{
+						$returnNode = "$a1-$a2";
+
+						if($a1 == $a2)
+						{
+							$returnNode = (int) $a1;
+						}
+					}
+					else if($a1 <= $b1 && $a2 >= $b2)
+					{
+						$returnNode = "$b1-$b2";
+
+						if($b1 == $b2)
+						{
+							$returnNode = (int) $b2;
+						}
+					}
+					else if($a2 <= $b2 && $a2 >= $b1)
+					{
+						$returnNode = "$b1-$a2";
+
+						if($b1 == $a2)
+						{
+							$returnNode = (int) $b1;
+						}
+					}
+					else if($a1 <= $b2 && $a1 >= $b1)
+					{
+						$returnNode = "$a1-$b2";
+
+						if($a1 == $b2)
+						{
+							$returnNode = (int) $a1;
+						}
+					}
+					else if($b2 <= $a2 && $b2 >= $a1)
+					{
+						$returnNode = "$a1-$b2";
+
+						if($a1 == $b2)
+						{
+							$returnNode = (int) $a1;
+						}
+					}
+					else if($b1 <= $a2 && $b1 >= $a1)
+					{
+						$returnNode = "$b1-$a2";
+
+						if($b1 == $a2)
+						{
+							$returnNode = (int) $b1;
+						}
+					}
+					else
+					{
+						return FALSE;
+					}
+				}
+				else
+				{
+					return FALSE;
+				}
+
+			}
+		}
+
+		return $returnNode;
 	}
 
 	public function subscribe($agent)
