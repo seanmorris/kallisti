@@ -142,10 +142,12 @@ class Channel
 
 			$returnNode = static::compareSegments($cmpA, $cmpB);
 
-			if($returnNode !== FALSE)
+			if($returnNode === FALSE)
 			{
-				$result[] = $returnNode;
+				return FALSE;
 			}
+
+			$result[] = $returnNode;
 		}
 
 		if(!$result)
@@ -263,7 +265,6 @@ class Channel
 				{
 					return FALSE;
 				}
-
 			}
 		}
 
