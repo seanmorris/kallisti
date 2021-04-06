@@ -6,6 +6,7 @@ class Channel
 	protected
 		$server
 		, $name
+		, $balance = 0
 		, $subscribers = []
 	;
 
@@ -297,8 +298,19 @@ class Channel
 
 	public function send($content, &$output, $origin, $originalChannel = NULL)
 	{
-		foreach($this->subscribers as $agent)
+		$subscriberCount = count($this->subscribers);
+
+		if($this->balance > $subscriberCount)
 		{
+			$this->balance = 0;
+		}
+
+		for($i = 0; $i < $subscriberCount; $i++)
+		{
+			$balanced = ($this->balance + $i) % $subscriberCount;
+
+			$agent = $this->subscribers[ $balanced ];
+
 			$agent->onMessage(
 				$content
 				, $output
@@ -307,6 +319,8 @@ class Channel
 				, $originalChannel
 			);
 		}
+
+		$this->balance++;
 	}
 
 	public function say($content, &$output, $origin, $originalChannel = NULL, $cc = [], $bcc = [])
