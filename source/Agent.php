@@ -13,14 +13,13 @@ class Agent
 
 	public function onMessage($content, &$output, $origin, $channel, $originalChannel, $cc = NULL)
 	{
-		$exchange  = $this->exchange();
+		$channelMap  = $this->channelMap();
 		$receivers = [];
 
-		foreach($exchange as $channelSelector => $receiver)
+		foreach($channelMap as $channelSelector => $receiver)
 		{
-			if(FALSE !== $channel::compareNames(
-				$channel->name, $channelSelector
-			)){
+			if($channel::compareNames($channel->name, $channelSelector) !== FALSE)
+			{
 				$receivers[] = $receiver;
 			}
 		}
@@ -45,7 +44,7 @@ class Agent
 		}
 	}
 
-	protected function exchange()
+	protected function channelMap()
 	{
 		return ['*' => 'receiver'];
 	}
@@ -76,9 +75,9 @@ class Agent
 
 	public function register($hub)
 	{
-		$exchange = $this->exchange();
+		$channelMap = $this->channelMap();
 
-		foreach($exchange as $channelSelector => $receiver)
+		foreach($channelMap as $channelSelector => $receiver)
 		{
 			$hub->subscribe($channelSelector, $this);
 		}

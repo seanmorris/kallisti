@@ -7,6 +7,8 @@ class Hub
 		, $channels      = []
 		, $subscriptions = [];
 
+	protected static $defaultChannel = \SeanMorris\Kallisti\Channel::class;
+
 	public function channels()
 	{
 		$channels = NULL;
@@ -21,7 +23,7 @@ class Hub
 			return $channels;
 		}
 
-		return ['*' => 'SeanMorris\Kallisti\Channel'];
+		return ['*' => static::$defaultChannel];
 	}
 
 	public function getChannels($name, $reason = null)
@@ -41,6 +43,8 @@ class Hub
 			if(!$channelClasses[$name]::isWildcard($name))
 			{
 				$this->channels[$name] = new $channelClasses[$name]($this, $name);
+
+				return [$name => $this->channels[$name]];
 			}
 		}
 
@@ -89,7 +93,6 @@ class Hub
 								}
 							}
 						}
-
 					}
 				}
 

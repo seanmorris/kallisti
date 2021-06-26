@@ -298,19 +298,12 @@ class Channel
 
 	public function send($content, &$output, $origin, $originalChannel = NULL)
 	{
-		$subscriberCount = count($this->subscribers);
+		$subscribers = $this->subscribers;;
 
-		if($this->balance > $subscriberCount)
+		shuffle($subscribers);
+
+		foreach($subscribers as $agent)
 		{
-			$this->balance = 0;
-		}
-
-		for($i = 0; $i < $subscriberCount; $i++)
-		{
-			$balanced = ($this->balance + $i) % $subscriberCount;
-
-			$agent = $this->subscribers[ $balanced ];
-
 			$agent->onMessage(
 				$content
 				, $output
